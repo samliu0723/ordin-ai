@@ -1,48 +1,30 @@
-import type { MetaFunction } from "@remix-run/node";
+import { type LoaderFunctionArgs, json, redirect } from "@remix-run/node";
+import { authCookie } from "~/utils/auth"; // Fake module for handling cookies
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "New Remix App" },
-    { name: "description", content: "Welcome to Remix!" },
-  ];
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  let cookieString = request.headers.get("Cookie");
+  // cookieString = null;
+  const userId = await authCookie.parse(cookieString);
+
+  if (userId) {
+    throw redirect("/dashboard");
+  }
+
+  return json(null);
 };
 
 export default function Index() {
   return (
-    <div className="font-sans p-4">
-      <h1 className="text-3xl font-bold underline">Welcome to Remix</h1>
-      <ul className="list-disc mt-4 pl-6 space-y-2">
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/start/quickstart"
-            rel="noreferrer"
-          >
-            5m Quick Start
-          </a>
-        </li>
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/start/tutorial"
-            rel="noreferrer"
-          >
-            30m Tutorial
-          </a>
-        </li>
-        <li>
-          <a
-            className="text-blue-700 underline visited:text-purple-900"
-            target="_blank"
-            href="https://remix.run/docs"
-            rel="noreferrer"
-          >
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold mb-8">OrdinAI</h1>
+      <div className="space-x-4">
+        <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+          Login
+        </button>
+        <button className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">
+          Signup
+        </button>
+      </div>
     </div>
   );
 }
