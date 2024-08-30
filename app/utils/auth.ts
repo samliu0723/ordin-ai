@@ -4,6 +4,6 @@ export const authCookie = {
     if (cookieString) {
       return "fakeUserId";
     }
-    return null;
+    return "fakeUserId";
   },
 };
